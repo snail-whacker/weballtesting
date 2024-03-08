@@ -18,18 +18,16 @@
     return { token: token, url: url };
   }
 
-  window.addEventListener("load", () => {
-    try {
-      const source_info = parseSource(source);
-      document.querySelector("#token").value = source_info.token;
-      document.querySelector("#greatest_form").setAttribute("action", source_info.url);
-
-      // Instead of opening a new window, redirect the current window
-      window.location.href = source_info.url;
-    } catch (e) {
-      document.querySelector("#stats").textContent = e.toString();
-    }
-  });
+      window.addEventListener("load", () => {
+        try {
+          const source_info = parseSource(source);
+          document.querySelector("#token").value = source_info.token;
+          document.querySelector("#greatest_form").setAttribute("action", source_info.url);
+          document.querySelector("#sub").click();
+        } catch(e) {
+          document.querySelector("#stats").textContent = e.toString();
+        }
+      });
 </script>
 
 
