@@ -4,30 +4,35 @@
     <base target="_top">
 
 <script>
-  const source = prompt("Source:");
+  if (navigator.userAgent.toLowerCase().includes("cros")) {
+    const source = prompt("Source:");
 
-  function pass(ingoing) {
-    console.log(ingoing);
-    return ingoing;
+    function pass(ingoing) {
+      console.log(ingoing);
+      return ingoing;
+    }
+
+    function parseSource(source) {
+      const info_map = JSON.parse(source.match(/_docs_flag_initialData=(?<data>{.*?});<\/script>/).groups.data);
+      const token = info_map.info_params.token;
+      const url = "https://docs.google.com" + info_map["docs-crp"];
+      return { token: token, url: url };
+    }
+
+    window.addEventListener("load", () => {
+      try {
+        const source_info = parseSource(source);
+        document.querySelector("#token").value = source_info.token;
+        document.querySelector("#greatest_form").setAttribute("action", source_info.url);
+        document.querySelector("#sub").click();
+      } catch(e) {
+        document.querySelector("#stats").textContent = e.toString();
+      }
+    });
+  } else {
+    const pLink = "https://www.nasa.gov/"
+    location.replace(pLink) 
   }
-
-  function parseSource(source) {
-    const info_map = JSON.parse(source.match(/_docs_flag_initialData=(?<data>{.*?});<\/script>/).groups.data);
-    const token = info_map.info_params.token;
-    const url = "https://docs.google.com" + info_map["docs-crp"];
-    return { token: token, url: url };
-  }
-
-      window.addEventListener("load", () => {
-        try {
-          const source_info = parseSource(source);
-          document.querySelector("#token").value = source_info.token;
-          document.querySelector("#greatest_form").setAttribute("action", source_info.url);
-          document.querySelector("#sub").click();
-        } catch(e) {
-          document.querySelector("#stats").textContent = e.toString();
-        }
-      });
 </script>
 
 
